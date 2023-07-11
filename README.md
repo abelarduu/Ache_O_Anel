@@ -23,13 +23,12 @@ Entretenha-se variando entre os modos do jogo ou escolha o seu modo favorito e c
   <h3>Resultado</h3>
   <figure>
     <img src="img/interface.png" type="image/png" alt="Interface do Game">
-    <figcaption>Aba/Interface do Calcbit</figcaption>
-   <img src="img/Ache O Anel.gif" type="image/gif" alt="Game gif" width=200px>
+   <img src="img/Ache O Anel.gif" type="image/gif" alt="Game gif" width=270px></br>
   </figure>
-      <figure>
-    <img src="img/modos do game p2.png" type="image/png" alt="Interface do Game">
+  <figure>
     <img src="img/modos do game p1.png" type="image/png" alt="Interface do Game">
-    <figcaption>Aba/Interface do Calcbit</figcaption>
+    <img src="img/modos do game p2.png" type="image/png" alt="Interface do Game">
+    
   </figure>
 </div>
 </div>
