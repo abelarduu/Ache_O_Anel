@@ -9,8 +9,8 @@
 
 <div>
   <h3>Sobre o projeto</h3>
-  <p>Divirta-se tentando adivinhar aonde está o anel!</br>
-Entretenha-se variando entre os modos do jogo </br> ou escolha o seu modo favorito e curta a jogabilidade.</p>
+  <p>Divirta-se tentando adivinhar aonde está o anel!
+Entretenha-se variando entre os modos do jogo ou escolha o seu modo favorito e curta a jogabilidade.</p>
   <p>
     <a href="https://www.python.org/">
       <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python V.3.9" ></a>
