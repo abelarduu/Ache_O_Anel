@@ -109,7 +109,6 @@ class Game:
                                 hand.ring=pyxel.rndi(0,1)
                                 self.correctHand= 2
                                 self.scores+=1 
-                                
                             else:
                                 self.scores= 0
                                 self.correctHand=0
