@@ -106,8 +106,9 @@ class Game:
                         
                         if hand.mousePressed:
                             if hand.ring:
-                                self.scores+=1 
+                                hand.ring=pyxel.rndi(0,1)
                                 self.correctHand= 2
+                                self.scores+=1 
                                 
                             else:
                                 self.scores= 0
