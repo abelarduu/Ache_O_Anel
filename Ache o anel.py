@@ -102,11 +102,10 @@ class Game:
                         hand.imgx= 32
                         
                         if hand.mouseClick:
-                            hand.imgx= 96 if hand.ring else 64      
+                            hand.imgx= 96 if hand.ring else 64
                         
                         if hand.mousePressed:
                             if hand.ring:
-                                hand.ring=pyxel.rndi(0,1)
                                 self.correctHand= 2
                                 self.scores+=1 
                             else:
@@ -114,7 +113,7 @@ class Game:
                                 self.correctHand=0
 
                         if hand.mouseRealesed: 
-                            hand.ring=pyxel.rndi(0,1)
+                            hand.ring=pyxel.rndi(0,1) 
                     else: 
                         hand.imgx= 0
 
