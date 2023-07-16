@@ -60,8 +60,8 @@ class Game:
         self.scores = 0
         self.correctHand= 1
         self.confetti_imgx,self.confetti_imgy=0,72
-        self.rightHand= Object(10,50,2,0,0,32,32)#13
-        self.leftHand= Object(42,50,2,0,32,32,32)#45
+        self.rightHand= Object(13,53,2,0,0,32,32)#13
+        self.leftHand= Object(45,53,2,0,32,32,32)#45
         self.handsList= [self.rightHand,self.leftHand]
 
         pyxel.load("resources/Ache_O_Anel.pyxres")
@@ -79,7 +79,7 @@ class Game:
                     if btn.mouseUp:
                         btn.y,btn.imgx= 43, 40
                         
-                        if btn.mouseClick:
+                        if btn.mousePressed:
                             btn.y, btn.imgx= 44, 80
                             
                             if btn.modeName== "Hand": 
@@ -94,45 +94,54 @@ class Game:
 
             #GAME HAND
             if self.gameHand:
-                #Verifição de interação com as mãos
-                for hand in self.handsList:
-                    self.rightHand.verClick(x1=9, x2=-5, y1=0, y2=-7)
-                    self.leftHand.verClick(x1=4, x2=-10,y2=-7)
-                    if hand.mouseUp: 
-                        hand.imgx= 32
-                        
-                        if hand.mouseClick:
-                            hand.imgx= 96 if hand.ring else 64
-                        
-                        if hand.mousePressed:
-                            if hand.ring:
-                                self.correctHand= 2
-                                self.scores+=1 
-                            else:
-                                self.scores= 0
-                                self.correctHand=0
+                if not self.correctHand==0:
+                    #Verifição de interação com as mãos
+                    for hand in self.handsList:
+                        self.rightHand.verClick(x1=9, x2=-5, y1=0, y2=-7)
+                        self.leftHand.verClick(x1=4, x2=-10,y2=-7)
+                        if hand.mouseUp: 
+                            hand.imgx= 32
+                            
+                            if hand.mouseClick:
+                                hand.imgx= 96 if hand.ring else 64
+                            
+                            if hand.mousePressed:
+                                if hand.ring:
+                                    self.correctHand= 2
+                                    self.scores+=1 
+                                else:
+                                    self.correctHand=0
 
-                        if hand.mouseRealesed: 
-                            hand.ring=pyxel.rndi(0,1) 
-                    else: 
-                        hand.imgx= 0
 
-                #Evitando que o anel surja nas 2 mãos
-                if self.rightHand.ring == self.leftHand.ring:
-                    self.rightHand.ring=pyxel.rndi(0,1)
-                    self.leftHand.ring= pyxel.rndi(0,1)
-                    
-                #Animação dos confetes
-                if self.confetti_imgy < 96:
-                    if self.confetti_imgx< 224:
-                        self.confetti_imgx+=32
-                    else:
-                        self.confetti_imgy= 96
-                        self.confetti_imgx=0
-                else: self.confetti_imgy=64
+                            if hand.mouseRealesed: 
+                                hand.ring=pyxel.rndi(0,1) 
+
+                        else: 
+                            hand.imgx= 0
+
+                    #Evitando que o anel surja nas 2 mãos
+                    if self.rightHand.ring == self.leftHand.ring:
+                        self.rightHand.ring=pyxel.rndi(0,1)
+                        self.leftHand.ring= pyxel.rndi(0,1)
+                        
+                    #Animação dos confetes
+                    if self.confetti_imgy < 96:
+                        if self.confetti_imgx< 224:
+                            self.confetti_imgx+=32
+                        else:
+                            self.confetti_imgy= 96
+                            self.confetti_imgx=0
+                    else: self.confetti_imgy=64
+
+                else:
+                    if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):                    
+                        self.play,self.chose_mode= False, False
+                        self.gameHand,self.gameCup= False, False
+                        self.correctHand=1
+                        self.scores= 0
         #Menu Inicial
         else:
-            if pyxel.btnr(pyxel.MOUSE_BUTTON_LEFT):
+            if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
                 self.play,self.chose_mode= True, True
 
     def draw(self):
@@ -140,10 +149,11 @@ class Game:
         pyxel.mouse(True)
         
         if self.play:
+            print(self.rightHand.ring, self.leftHand.ring)
             #Escolha do modo de game
             if self.chose_mode:
                 pyxel.blt(0,0,0,90,0,90,140)
-                pyxel.text(pyxel.width/2 - len("Escolha um modo:")/2 *4,37,"Escolha um modo:",7)
+                pyxel.text(pyxel.width/2+1 - len("Escolha um modo:")/2 *4,37,"Escolha um modo:",7)
                 for btn in self.modeList:
                     btn.draw()
 
@@ -159,9 +169,18 @@ class Game:
                         pyxel.text(pyxel.width/2- len("Acertou!")/2 *4, 20,"Acertou!",pyxel.frame_count %16)
                     if self.correctHand== 0: 
                         pyxel.text(pyxel.width/2-len("Errou!")/2 *4, 20,"Errou!",7)
+                        pyxel.text(pyxel.width/2 - len("Clique para voltar")/2 *4,120,"Clique para voltar",7)
+                        pyxel.text(pyxel.width/2 - len("ao menu inicial")/2 *4,130,"ao menu inicial",7)
+                        
+                        pyxel.rectb(pyxel.width/2 -15,90,27,20,7)
+                        pyxel.text(pyxel.width/2 - len("Total:")/2 *4,93,"Total:",7)
+                        pyxel.text(pyxel.width/2-3 - len(str(self.scores))/2 *4, 101, str(self.scores), 7)
+                        pyxel.blt(pyxel.width/2,100,2,144,0,5,7)
+  
         else:
             pyxel.blt(0,0,0,0,0,90,140)
             pyxel.text(pyxel.width/2 - len("Clique para continuar")/2 *4,133,"Clique para continuar",7)
+            
 #Verificação da execução direta do módulo
 if __name__ == "__main__":
     Game()
