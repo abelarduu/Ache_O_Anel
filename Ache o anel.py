@@ -195,14 +195,12 @@ class Game:
 
            #GAME HAND
             if self.gameHand:
-                print(self.rightHand.ring, self.leftHand.ring)
                 pyxel.text(pyxel.width/2- len(str(self.scores))/2 *4, 5, str(self.scores), 7)
                 for hand in self.handsList:
                     hand.draw()
 
            #GAME CUP
             if self.gameCup:
-                print(self.rightCup.ring, self.centerCup.ring, self.leftCup.ring)
                 pyxel.text(pyxel.width/2- len(str(self.scores))/2 *4, 5, str(self.scores), 7)
                 pyxel.blt(0,104,0,0,140,90,36)
                 for cup in self.cupsList:
