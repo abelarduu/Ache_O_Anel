@@ -106,7 +106,7 @@ class Game:
                 if obj.mouseReleased: 
                     obj.ring=pyxel.rndi(0,1)
             #Mouse Out
-            else: obj.imgx= imgxM1
+            else: obj.imgx= imgxM2
                 
     def update(self):
         if self.play:
