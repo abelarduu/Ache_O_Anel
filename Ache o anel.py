@@ -85,7 +85,7 @@ class Game:
             self.gameHand,self.gameCup= False, False
             self.correctObj=1
             self.scores= 0
-
+                
     def check_interaction(self, objList, imgxM1, imgxM2, imgxC1, imgxC2):
         for obj in objList:
             #Mouse Up
@@ -107,6 +107,31 @@ class Game:
                     obj.ring=pyxel.rndi(0,1)
             #Mouse Out
             else: obj.imgx= imgxM2
+                
+    def check_equal_values(self, obj1, obj2, obj3=None):
+        #Falta o obj3 trocar de valor
+        if  not obj3 == None:
+            if  obj1.ring and obj2.ring: 
+                obj1.ring= pyxel.rndi(0,1)
+                obj2.ring= pyxel.rndi(0,1)
+            
+            if obj1.ring and obj3.ring:
+                obj1.ring= pyxel.rndi(0,1)
+                obj3.ring= pyxel.rndi(0,1)  
+                
+            if obj2.ring and obj3.ring:
+                obj2.ring= pyxel.rndi(0,1)
+                obj3.ring= pyxel.rndi(0,1)
+
+            if obj1.ring == obj2.ring == obj3.ring: 
+                obj1.ring= pyxel.rndi(0,1)
+                obj2.ring= pyxel.rndi(0,1)
+                obj3.ring= pyxel.rndi(0,1)
+        else:
+            if obj1.ring == obj2.ring:
+                obj1.ring= pyxel.rndi(0,1)
+                obj2.ring= pyxel.rndi(0,1)
+
                 
     def update(self):
         if self.play:
@@ -144,10 +169,8 @@ class Game:
                     self.leftHand.verClick(x1=4, x2=-10,y2=-7)
                     self.check_interaction(self.handsList, 32, 0, 96, 64)
 
-                    #Evitando que o anel surja nas 2 mãos
-                    if self.rightHand.ring == self.leftHand.ring:
-                        self.rightHand.ring=pyxel.rndi(0,1)
-                        self.leftHand.ring= pyxel.rndi(0,1)
+                    #Evitando que o anel surja em mais de 1 mão
+                    self.check_equal_values(self.rightHand, self.leftHand)
                 else: self.reset()
                      
             #GAME CUP
@@ -160,11 +183,7 @@ class Game:
                     self.check_interaction(self.cupsList, 150, 128, 194, 172)
 
                     #Evitando que o anel surja nas 2 mãos
-                    if self.rightCup.ring == self.centerCup.ring \
-                        or self.rightCup.ring == self.leftCup.ring:
-                        self.rightCup.ring= pyxel.rndi(0,1)
-                        self.centerCup.ring=pyxel.rndi(0,1)
-                        self.leftCup.ring= pyxel.rndi(0,1)
+                    self.check_equal_values(self.rightCup, self.centerCup , self.leftCup)
                 else: self.reset()
                     
             #Acerto
