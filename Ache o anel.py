@@ -237,7 +237,8 @@ class Game:
                 pyxel.text(pyxel.width/2 - len("Clique para voltar")/2 *4,120,"Clique para voltar",7)
                 pyxel.text(pyxel.width/2 - len("ao menu inicial")/2 *4,130,"ao menu inicial",7)
                 
-                pyxel.rectb(pyxel.width/2 -15,90,27,20,7)
+                pyxel.rect(pyxel.width/2 -15,90,27,20,0)
+                pyxel.rectb(pyxel.width/2 -15,90,27,20,10)
                 pyxel.text(pyxel.width/2 - len("Total:")/2 *4,93,"Total:",7)
                 pyxel.text(pyxel.width/2-3 - len(str(self.scores))/2 *4, 101, str(self.scores), 7)
                 pyxel.blt(pyxel.width/2,100,2,235,0,5,7)
