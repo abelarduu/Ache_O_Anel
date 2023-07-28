@@ -2,6 +2,7 @@
 #Ache O Anel#
 #############
 import pyxel
+from datetime import timedelta
 
 #Padronização Geral dos Objetos
 class Object(object):
@@ -75,6 +76,15 @@ class Game:
         self.leftCup= Object(63,88,2,128,0,22,35)
         self.cupsList= [self.rightCup,self.centerCup,self.leftCup]
         
+        #Variaveis do Game Cup
+        self.bonusRound= False
+        self.timer= timedelta()
+        self.ring1= Object(pyxel.rndi(0,74),pyxel.rndi(-32,0),2,220,0,13,16)
+        self.ring2= Object(pyxel.rndi(0,74),pyxel.rndi(-32,0),2,220,0,13,16)
+        self.ring3= Object(pyxel.rndi(0,74),pyxel.rndi(-32,0),2,220,0,13,16)
+        self.ring4= Object(pyxel.rndi(0,74),pyxel.rndi(-32,0),2,220,0,13,16)
+        self.ring5= Object(pyxel.rndi(0,74),pyxel.rndi(-32,0),2,220,0,13,16)
+        self.ringList=[self.ring1,self.ring2,self.ring3,self.ring4,self.ring5]
         pyxel.load("resources/Ache_O_Anel.pyxres")
         #pyxel.playm(0, loop=True)
         pyxel.run(self.update,self.draw) 
@@ -100,7 +110,7 @@ class Game:
                 if obj.mousePressed:
                     if obj.ring:
                         self.correctObj= 2
-                        self.scores+=1 
+                        self.scores+=1
                     else:self.correctObj=0
                 #Mouse released
                 if obj.mouseReleased: 
@@ -131,8 +141,12 @@ class Game:
             if obj1.ring == obj2.ring:
                 obj1.ring= pyxel.rndi(0,1)
                 obj2.ring= pyxel.rndi(0,1)
-
                 
+    def Timer(self):
+        if self.timer < timedelta(seconds=10):
+            self.timer = timedelta(seconds=1)
+            print(self.timer)
+
     def update(self):
         if self.play:
             #Escolha do modo de game
@@ -162,7 +176,7 @@ class Game:
                     else: btn.y, btn.imgx=44, 0
                         
            #GAME HAND
-            if self.gameHand:
+            if self.gameHand and not self.bonusRound:
                 if not self.correctObj==0:
                     #Verifição de interação com as mãos
                     self.rightHand.verClick(x1=9, x2=-5, y1=0, y2=-7)
@@ -174,7 +188,7 @@ class Game:
                 else: self.reset()
                      
             #GAME CUP
-            if self.gameCup:
+            if self.gameCup and not self.bonusRound:
                 if not self.correctObj==0:
                     #Verifição de interação com os Copos
                     self.rightCup.verClick(x1=1,x2=-2,y1=7,y2=-2)
@@ -196,6 +210,31 @@ class Game:
                             self.confetti_imgy= 128
                             self.confetti_imgx=0
                     else: self.confetti_imgy=96
+
+            #verificação da validação da rodada bonus 
+            if self.scores>0 and self.scores %1== 0:
+                self.bonusRound= True
+                
+            #Bonus:"Chuva de Aneis"
+            if self.bonusRound:
+                #self.timer()   #Verificação do temporizador
+
+                for ring in self.ringList:
+                    ring.verClick(x1=1,x2=-2,y1=7,y2=-2)
+                    
+                    if ring.y > pyxel.height:
+                        ring.x= pyxel.rndi(0,74)
+                        ring.y= -16
+                    else:ring.y+=3
+                        
+                    if ring.mouseUp and ring.mouseClick:
+                        self.scores+=1
+                        ring.y= -16
+                        ring.x= pyxel.rndi(0,74)
+            else:
+                #Troca de posição dos aneis
+                for ring in self.ringList:
+                    ring.x,ring.y= pyxel.rndi(0,74),pyxel.rndi(-32,0)
         #Menu Inicial
         else:
             if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
@@ -213,13 +252,13 @@ class Game:
                     btn.draw()
 
            #GAME HAND
-            if self.gameHand:
+            if self.gameHand and not self.bonusRound:
                 pyxel.text(pyxel.width/2- len(str(self.scores))/2 *4, 5, str(self.scores), 7)
                 for hand in self.handsList:
                     hand.draw()
 
            #GAME CUP
-            if self.gameCup:
+            if self.gameCup and not self.bonusRound:
                 pyxel.text(pyxel.width/2- len(str(self.scores))/2 *4, 5, str(self.scores), 7)
                 pyxel.blt(0,104,0,0,140,90,36)
                 for cup in self.cupsList:
@@ -227,12 +266,12 @@ class Game:
     
             #Erros e acertos
             #Acerto
-            if self.correctObj== 2:
+            if self.correctObj== 2 and not self.bonusRound:
                 pyxel.blt(-6,-5,2,self.confetti_imgx,self.confetti_imgy, 32,32)         
                 pyxel.blt(101-37,-5,2,self.confetti_imgx,self.confetti_imgy, -32,32)
                 pyxel.text(pyxel.width/2+1 -len("Acertou!")/2 *4, 20,"Acertou!",pyxel.frame_count %16)
             #Erro
-            if self.correctObj== 0: 
+            if self.correctObj== 0 and not self.bonusRound:
                 pyxel.text(pyxel.width/2-len("Errou!")/2 *4, 20,"Errou!",7)
                 pyxel.text(pyxel.width/2 - len("Clique para voltar")/2 *4,120,"Clique para voltar",7)
                 pyxel.text(pyxel.width/2 - len("ao menu inicial")/2 *4,130,"ao menu inicial",7)
@@ -242,6 +281,15 @@ class Game:
                 pyxel.text(pyxel.width/2 - len("Total:")/2 *4,93,"Total:",7)
                 pyxel.text(pyxel.width/2-3 - len(str(self.scores))/2 *4, 101, str(self.scores), 7)
                 pyxel.blt(pyxel.width/2,100,2,235,0,5,7)
+                
+            #Rodada Bonus
+            if self.bonusRound:
+                for ring in self.ringList:
+                    ring.draw()
+                pyxel.text(pyxel.width/2- len(str(self.scores))/2 *4, 5, str(self.scores), 7)
+                pyxel.text(pyxel.width/2 - len("Rodada Bonus")/2 *4,11, "Rodada Bonus", 8)
+                pyxel.text(pyxel.width/2 - len("Chuva de Aneis")/2 *4,18, "Chuva de Aneis", 10)
+                pyxel.text(pyxel.width/2 - len('Pegue os Aneis')/2 *4,25, "Pegue os Aneis", pyxel.frame_count %16)
         #Menu Inicial
         else:
             pyxel.blt(0,0,0,0,0,90,140)
