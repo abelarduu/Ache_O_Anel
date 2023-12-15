@@ -86,7 +86,7 @@ class Game:
         self.ring5= Object(pyxel.rndi(0,74),pyxel.rndi(-32,0),2,220,0,13,16)
         self.ringList=[self.ring1,self.ring2,self.ring3,self.ring4,self.ring5]
         pyxel.load("resources/Ache_O_Anel.pyxres")
-        #pyxel.playm(0, loop=True)
+        pyxel.playm(0, loop=True)
         pyxel.run(self.update,self.draw) 
         
     def reset(self):
@@ -104,13 +104,14 @@ class Game:
                 #Mouse Click
                 if obj.mouseClick:
                     if obj.ring:
-                        obj.imgx= imgxC1 
+                        obj.imgx= imgxC1
                     else:obj.imgx= imgxC2
                 #Mouse Pressed
                 if obj.mousePressed:
                     if obj.ring:
                         self.correctObj= 2
                         self.scores+=1
+                        
                     else:self.correctObj=0
                 #Mouse released
                 if obj.mouseReleased: 
@@ -119,7 +120,6 @@ class Game:
             else: obj.imgx= imgxM2
                 
     def check_equal_values(self, obj1, obj2, obj3=None):
-        #Falta o obj3 trocar de valor
         if  not obj3 == None:
             if  obj1.ring and obj2.ring: 
                 obj1.ring= pyxel.rndi(0,1)
@@ -153,7 +153,7 @@ class Game:
             if self.chose_mode:
                 #Interação com os Botões
                 for btn in self.modeList:
-                    btn.verClick(x2= -1,y2= 100)
+                    btn.verClick(x2=-1,y2= 100)
                     
                     #Mouse Up
                     if btn.mouseUp:
@@ -212,7 +212,7 @@ class Game:
                     else: self.confetti_imgy=96
 
             #verificação da validação da rodada bonus 
-            if self.scores>0 and self.scores %1== 0:
+            if self.scores>0 and self.scores %5== 0:
                 self.bonusRound= True
                 
             #Bonus:"Chuva de Aneis"
@@ -228,6 +228,7 @@ class Game:
                     else:ring.y+=3
                         
                     if ring.mouseUp and ring.mouseClick:
+                        pyxel.play(3,3)
                         self.scores+=1
                         ring.y= -16
                         ring.x= pyxel.rndi(0,74)
