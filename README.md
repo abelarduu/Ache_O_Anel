@@ -8,7 +8,7 @@
 <div>
   <h3>Sobre o projeto</h3>
   <div>
-  <h4>🚧⚠️Em desenvolvimento...⚠️🚧</h4>
+
 </div>
   <p>Divirta-se tentando adivinhar aonde está o anel!
 Entretenha-se variando entre os modos do jogo ou escolha o seu modo favorito e curta a jogabilidade.</p>
