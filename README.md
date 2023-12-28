@@ -16,7 +16,7 @@ Entretenha-se variando entre os modos do jogo ou escolha o seu modo favorito e c
 
 <p>
 <a href="https://www.python.org/">
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" ></a>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python V.3.12.1" ></a>
 <a href="https://github.com/kitao/pyxel">
   <img src="https://img.shields.io/badge/Pyxel-v2.0.2-blue?style=for-the-badge&logo=python&logoColor=white" alt="Pyxel V.2.0.2" ></a>
 </p>
