@@ -2,7 +2,6 @@
 #Ache O Anel#
 #############
 import pyxel
-from enum import Enum
 from datetime import datetime, timedelta
 
 #Padronização Geral dos Objetos
@@ -81,9 +80,7 @@ class Game:
         #Variaveis da Rodada Bônus
         self.bonusRound= False
         self.new_timer= False
-        self.timer= Enum('Timer', ['initial', 'final'])
-        self.timer.initial._value_= datetime.now()
-        self.timer.final._value_= self.timer.initial.value + timedelta(seconds=5)
+        self.timer_final= datetime.now() + timedelta(seconds=5)
 
         self.ring1= Object(pyxel.rndi(0,74), pyxel.rndi(-32,0), 2, 220, 0, 13, 16)
         self.ring2= Object(pyxel.rndi(0,74), pyxel.rndi(-32,0), 2, 220, 0, 13, 16)
@@ -95,24 +92,22 @@ class Game:
         pyxel.load("resources/Ache_O_Anel.pyxres")
         pyxel.playm(0, loop=True)
         pyxel.run(self.update, self.draw) 
-                
-    def get_new_timer(self, initial, final):
-        if self.new_timer:
-            self.timer.initial._value_= initial
-            self.timer.final._value_= final
 
-   #Verificação do temporizador
-    def timerBonus(self):
-        self.get_new_timer(initial= datetime.now(), final= datetime.now() + timedelta(seconds=5))
-        if datetime.now() >= self.timer.final.value:
-            self.bonusRound= False 
-            
     def reset(self):
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
             self.play,self.chose_mode= False, False
             self.gameHand,self.gameCup= False, False
             self.correctObj=1
             self.scores= 0
+
+    #Verificação do temporizador
+    def timerBonus(self):
+        if self.new_timer:
+            self.timer_final= datetime.now() + timedelta(seconds=5)
+            self.new_timer= False
+
+        if datetime.now() >= self.timer_final:
+            self.bonusRound= False 
                 
     def check_interaction(self, objList, imgxM1, imgxM2, imgxC1, imgxC2):
         for obj in objList:
@@ -240,8 +235,7 @@ class Game:
             #Bonus:"Chuva de Aneis"
             #Verificação do temporizador
             if self.bonusRound:
-                self.timerBonus()  
-                self.new_timer= False                
+                self.timerBonus()                
 
                 for ring in self.ringList:
                     ring.verClick(x1=1, x2=-2, y1=7, y2=-2)
