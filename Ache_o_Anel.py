@@ -1,6 +1,3 @@
-#############
-#Ache O Anel#
-#############
 import pyxel
 from datetime import datetime, timedelta
 
@@ -269,19 +266,19 @@ class Game:
             #Escolha do modo de game
             if self.chose_mode:
                 pyxel.blt(0, 0, 0, 90, 0, 90, 140)
-                pyxel.text(pyxel.width/2+1 - len("Escolha um modo:")/2 *4, 37, "Escolha um modo:", 7)
+                pyxel.text(pyxel.width/2+1 - len("Escolha um modo:")/2 * pyxel.FONT_WIDTH, 37, "Escolha um modo:", 7)
                 for btn in self.modeList:
                     btn.draw()
 
            #GAME HAND
             if self.gameHand and not self.bonusRound:
-                pyxel.text(pyxel.width/2- len(str(self.scores))/2 *4, 5, str(self.scores), 7)
+                pyxel.text(pyxel.width/2- len(str(self.scores))/2 * pyxel.FONT_WIDTH, 5, str(self.scores), 7)
                 for hand in self.handsList:
                     hand.draw()
 
            #GAME CUP
             if self.gameCup and not self.bonusRound:
-                pyxel.text(pyxel.width/2- len(str(self.scores))/2 *4, 5, str(self.scores), 7)
+                pyxel.text(pyxel.width/2- len(str(self.scores))/2 * pyxel.FONT_WIDTH, 5, str(self.scores), 7)
                 pyxel.blt(0, 104, 0, 0, 140, 90, 36)
                 for cup in self.cupsList:
                     cup.draw()
@@ -291,33 +288,33 @@ class Game:
             if self.correctObj== 2 and not self.bonusRound:
                 pyxel.blt(-6, -5, 2, self.confetti_imgx, self.confetti_imgy, 32, 32)         
                 pyxel.blt(64, -5, 2, self.confetti_imgx, self.confetti_imgy,-32, 32)
-                pyxel.text(pyxel.width/2+1 - len("Acertou!")/2 *4, 20, "Acertou!", pyxel.frame_count %16)
+                pyxel.text(pyxel.width/2+1 - len("Acertou!")/2 * pyxel.FONT_WIDTH, 20, "Acertou!", pyxel.frame_count %16)
             #Erro
             if self.correctObj== 0 and not self.bonusRound:
-                pyxel.text(pyxel.width/2 - len("Errou!")/2 *4, 20,"Errou!",7)
-                pyxel.text(pyxel.width/2 - len("Clique para voltar")/2 *4, 120, "Clique para voltar", 7)
-                pyxel.text(pyxel.width/2 - len("ao menu inicial")/2 *4, 130, "ao menu inicial", 7)
+                pyxel.text(pyxel.width/2 - len("Errou!")/2 * pyxel.FONT_WIDTH, 20,"Errou!",7)
+                pyxel.text(pyxel.width/2 - len("Clique para voltar")/2 * pyxel.FONT_WIDTH, 120, "Clique para voltar", 7)
+                pyxel.text(pyxel.width/2 - len("ao menu inicial")/2 * pyxel.FONT_WIDTH, 130, "ao menu inicial", 7)
                 
                 pyxel.rect(pyxel.width /2 - 15, 90, 27, 20, 0)
                 pyxel.rectb(pyxel.width/2 - 15, 90, 27, 20, 10)
-                pyxel.text(pyxel.width /2 - len("Total:")/2 *4,93,"Total:",7)
-                pyxel.text(pyxel.width /2 -3 - len(str(self.scores))/2 *4, 101, str(self.scores), 7)
-                pyxel.blt(pyxel.width  /2, 100, 2, 235, 0, 5, 7)
+                pyxel.text(pyxel.width /2 - len("Total:")/2 * pyxel.FONT_WIDTH,93,"Total:",7)
+                pyxel.text(pyxel.width /2 -3 - len(str(self.scores))/2 *pyxel.FONT_WIDTH, 101, str(self.scores), 7)
+                pyxel.blt(pyxel.width  /2+1, 100, 2, 235, 0, 5, 7)
                 
             #Rodada Bonus
             if self.bonusRound:
                 for ring in self.ringList:
                     ring.draw()
                         
-                pyxel.text(pyxel.width/2 - len(str(self.scores))/2 *4, 5, str(self.scores), 7)
-                pyxel.text(pyxel.width/2 - len("Rodada Bonus")  /2 *4,11, "Rodada Bonus", 8)
-                pyxel.text(pyxel.width/2 - len("Chuva de Aneis")/2 *4,18, "Chuva de Aneis", 10)
-                pyxel.text(pyxel.width/2 - len('Pegue os Aneis')/2 *4,25, "Pegue os Aneis", pyxel.frame_count %16)
+                pyxel.text(pyxel.width/2 - len(str(self.scores))/2 * pyxel.FONT_WIDTH, 5, str(self.scores), 7)
+                pyxel.text(pyxel.width/2 - len("Rodada Bonus")  /2 * pyxel.FONT_WIDTH, 11, "Rodada Bonus", 8)
+                pyxel.text(pyxel.width/2 - len("Chuva de Aneis")/2 * pyxel.FONT_WIDTH, 18, "Chuva de Aneis", 10)
+                pyxel.text(pyxel.width/2 - len('Pegue os Aneis')/2 * pyxel.FONT_WIDTH, 25, "Pegue os Aneis", pyxel.frame_count %16)
         #Menu Inicial
         else:
             pyxel.blt(0, 0, 0, 0, 0, 90, 140)
-            pyxel.text(pyxel.width/2 - len("Clique para continuar")/2 *4, 133, "Clique para continuar", 7)
+            pyxel.text(pyxel.width/2 - len("Clique para continuar")/2 * pyxel.FONT_WIDTH, 133, "Clique para continuar", 7)
 
-#Verificação da execução direta do módulo
+
 if __name__ == "__main__":
     Game()
