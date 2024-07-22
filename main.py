@@ -49,6 +49,7 @@ class Game:
         pyxel.run(self.update, self.draw) 
 
     def reset(self):
+        """Reseta o estado do jogo ao clicar com o botão esquerdo do mouse"""
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
             self.play = False
             self.chose_mode = False
@@ -59,6 +60,7 @@ class Game:
 
     # Verificação do temporizador
     def timerBonus(self):
+        """Verificação do temporizador para a rodada bônus"""
         if self.new_timer:
             self.timer_final = datetime.now() + timedelta(seconds= 5)
             self.new_timer = False
@@ -67,6 +69,7 @@ class Game:
             self.bonusRound= False 
                 
     def check_interaction(self, objList, imgxM1, imgxM2, imgxC1, imgxC2):
+        """Verifica a interação do mouse com os objetos fornecidos na lista objList."""
         for obj in objList:
             # Mouse Up
             if obj.mouseUp:
@@ -95,6 +98,7 @@ class Game:
                 obj.imgx= imgxM2
                 
     def check_equal_values(self, obj1, obj2, obj3= None):
+        """Evita que múltiplos objetos tenham o mesmo valor de 'ring'."""
         if  not obj3 == None:
             if  obj1.ring and obj2.ring: 
                 obj1.ring = pyxel.rndi(0, 1)
@@ -116,7 +120,17 @@ class Game:
             if obj1.ring == obj2.ring:
                 obj1.ring = pyxel.rndi(0,1)
                 obj2.ring = pyxel.rndi(0,1)
-
+                
+    def draw_centered_text(self, txt, y, col, padx= 0):
+        """Centraliza e desenha o texto na tela"""
+        text_center_x = len(txt) / 2 * pyxel.FONT_WIDTH
+        if padx > 0:
+            text_center_x+= int(padx)
+        else:
+            text_center_x-= int(padx)
+            
+        pyxel.text(pyxel.width / 2 - text_center_x, y, txt, col)
+    
     def update(self):
         """Verifica interação a cada quadro."""
         if self.play:
@@ -142,7 +156,7 @@ class Game:
                                 self.gameHand = True
                                 self.gameCup = False
                                 
-                            # Mode Game1
+                            # Mode Game2
                             if btn.modeName == "Cup":
                                 self.chose_mode = False
                                 self.gameCup = True
@@ -152,6 +166,7 @@ class Game:
                         btn.y = 44
                         btn.imgx = 0
                         
+            # Gameplay
             # GAME HAND
             if self.gameHand and not self.bonusRound:
                 if not self.correctObj == 0:
@@ -164,7 +179,7 @@ class Game:
                     self.check_equal_values(self.rightHand, self.leftHand)
                 else: 
                     self.reset()
-                     
+                 
             # GAME CUP
             if self.gameCup and not self.bonusRound:
                 if not self.correctObj == 0:
@@ -176,7 +191,8 @@ class Game:
 
                     # Evitando que o anel surja nas 2 mãos
                     self.check_equal_values(self.rightCup, self.centerCup , self.leftCup)
-                else: self.reset()
+                else:
+                    self.reset()
                     
             # Acerto
             if self.correctObj == 2:
@@ -198,7 +214,7 @@ class Game:
             # Bonus:"Chuva de Aneis"
             # Verificação do temporizador
             if self.bonusRound:
-                self.timerBonus()                
+                self.timerBonus()               
 
                 for ring in self.ringList:
                     ring.verClick(padx1= 1, padx2= -2, pady1= 7, pady2= -2)
@@ -227,6 +243,7 @@ class Game:
                 self.chose_mode = True
 
     def draw(self):
+        """Atualiza os elementos gráficos na tela"""
         pyxel.cls(0)
         pyxel.mouse(True)
         
@@ -234,77 +251,61 @@ class Game:
             # Escolha do modo de game
             if self.chose_mode:
                 pyxel.blt(0, 0, 0, 90, 0, 90, 140)
-                
-                TXT = "Escolha um modo:"
-                TEXT_CENTER_X = len(TXT)/2 * pyxel.FONT_WIDTH
-                pyxel.text(pyxel.width/2 + 1 - TEXT_CENTER_X, 37, TXT, 7)
+                self.draw_centered_text("Escolha um modo:", 37, 7 ,padx= +1)
                 for btn in self.modeList:
                     btn.draw()
 
-           # GAME HAND
-            if self.gameHand and not self.bonusRound:
-                SCORE_CENTER_X = len(str(self.scores))/2 * pyxel.FONT_WIDTH
-                pyxel.text(pyxel.width/2 - SCORE_CENTER_X, 5, str(self.scores), 7)
-                for hand in self.handsList:
-                    hand.draw()
+            # Gameplay
+            if (self.gameHand or self.gameCup or self.bonusRound):
+                self.draw_centered_text(str(self.scores), 5, 7)
+               
+                # GAME HAND
+                if self.gameHand and not self.bonusRound:
+                    for hand in self.handsList:
+                        hand.draw()
 
-           # GAME CUP
-            if self.gameCup and not self.bonusRound:
-                SCORE_CENTER_X =  len(str(self.scores))/2 * pyxel.FONT_WIDTH
-                pyxel.text(pyxel.width/2 - SCORE_CENTER_X, 5, str(self.scores), 7)
-                pyxel.blt(0, 104, 0, 0, 140, 90, 36)
-                for cup in self.cupsList:
-                    cup.draw()
+               # GAME CUP
+                if self.gameCup and not self.bonusRound:
+                    pyxel.blt(0, 104, 0, 0, 140, 90, 36)
+                    for cup in self.cupsList:
+                        cup.draw()
     
-            # Erros e acertos
-            # Acerto
-            if self.correctObj == 2 and not self.bonusRound:
-                pyxel.blt(-6, -5, 2, self.confetti_imgx, self.confetti_imgy, 32, 32)         
-                pyxel.blt(64, -5, 2, self.confetti_imgx, self.confetti_imgy, -32, 32)
-                
-                TXT = "Acertou!"
-                TEXT_CENTER_X = len(TXT)/2 * pyxel.FONT_WIDTH
-                pyxel.text(pyxel.width/2 + 1 - TEXT_CENTER_X, 20, TXT, pyxel.frame_count %16)
-            
-            # Erro
-            if self.correctObj == 0 and not self.bonusRound:
-                TXT1 = "Errou!"
-                TXT2 = "Clique para voltar"
-                TXT3 = "ao menu inicial"
-                TEXT_CENTER_X = lambda txt: len(txt)/2 * pyxel.FONT_WIDTH
-                
-                pyxel.text( pyxel.width/2 - TEXT_CENTER_X(TXT1), 20,TXT1,7)
-                pyxel.text( pyxel.width/2 - TEXT_CENTER_X(TXT2), 120, TXT2, 7)
-                pyxel.text( pyxel.width/2 - TEXT_CENTER_X(TXT3), 130, TXT3, 7)
-                
-                pyxel.rect(pyxel.width /2 - 15, 90, 27, 20, 0)
-                pyxel.rectb(pyxel.width /2 - 15, 90, 27, 20, 10)
-                pyxel.text(pyxel.width /2 - TEXT_CENTER_X("Total:"), 93, "Total:", 7)
-                pyxel.text(pyxel.width /2 -3 - TEXT_CENTER_X(str(self.scores)), 101, str(self.scores), 7)
-                pyxel.blt(pyxel.width /2 + 1, 100, 2, 235, 0, 5, 7)
-                
-            # Rodada Bonus
-            if self.bonusRound:
-                TEXT_CENTER_X = lambda txt: len(txt)/2 * pyxel.FONT_WIDTH
-              
-                for ring in self.ringList:
-                    ring.draw()
-                        
-                TXT1 = "Rodada Bonus"
-                TXT2 = "Chuva de Aneis"
-                TXT3 = "Pegue os Aneis"
-                pyxel.text(pyxel.width/2 - TEXT_CENTER_X(str(self.scores)), 5, str(self.scores), 7)
-                pyxel.text(pyxel.width/2 - TEXT_CENTER_X(TXT1), 11, TXT1, 8)
-                pyxel.text(pyxel.width/2 - TEXT_CENTER_X(TXT2), 18, TXT2, 10)
-                pyxel.text(pyxel.width/2 - TEXT_CENTER_X(TXT3), 25, TXT3, pyxel.frame_count %16)
+                # Erros e acertos
+                # Acerto
+                if self.correctObj == 2 and not self.bonusRound:
+                    self.draw_centered_text("Acertou!", 20, pyxel.frame_count %16)
+                    pyxel.blt(-6, -5, 2, self.confetti_imgx, self.confetti_imgy, 32, 32)         
+                    pyxel.blt(64, -5, 2, self.confetti_imgx, self.confetti_imgy, -32, 32)
+                    
+                # Erro
+                if self.correctObj == 0 and not self.bonusRound:
+                    self.draw_centered_text("Errou!", 20, 7)
+                    self.draw_centered_text("Clique para voltar", 120, 7)
+                    self.draw_centered_text("ao menu inicial", 130, 7)
+                    
+                    #Total de scores
+                    pyxel.rect(pyxel.width /2 - 15, 90, 27, 20, 0)
+                    pyxel.rectb(pyxel.width /2 - 15, 90, 27, 20, 10)
+                    self.draw_centered_text("Total:", 93, 7)
+                    self.draw_centered_text(str(self.scores), 101, 7, padx= -3)
+                    pyxel.blt(pyxel.width /2 + 1, 100, 2, 235, 0, 5, 7)
+                    
+                    
+                # Rodada Bonus
+                if self.bonusRound:
+                    TEXT_CENTER_X = lambda txt: len(txt)/2 * pyxel.FONT_WIDTH
+                  
+                    for ring in self.ringList:
+                        ring.draw()
+                            
+                    self.draw_centered_text("Rodada Bonus", 11, 8)
+                    self.draw_centered_text("Chuva de Aneis", 18, 10)
+                    self.draw_centered_text("Pegue os Aneis", 25, pyxel.frame_count %16)
         
         # Menu Inicial
         else:
             pyxel.blt(0, 0, 0, 0, 0, 90, 140)
-            
-            TXT = "Clique para continuar"
-            TEXT_CENTER_X = lambda txt: len(txt)/2 * pyxel.FONT_WIDTH
-            pyxel.text(pyxel.width/2 - TEXT_CENTER_X(TXT), 133, TXT, 7)
+            self.draw_centered_text("Clique para continuar", 133, 7)
 
 if __name__ == "__main__":
     Game()
