@@ -12,13 +12,13 @@ class Object(object):
         self.w = w
         self.h = h
         
-        self.mouseUp = False
-        self.mouseClick = False
-        self.mousePressed = False
-        self.mouseReleased = False
+        self.mouse_up = False
+        self.mouse_click = False
+        self.mouse_pressed = False
+        self.mouse_released = False
         self.ring = pyxel.rndi(0, 1)
         
-    def verClick(self, padx1=0, padx2=0, pady1=0, pady2=0):
+    def check_click(self, padx1=0, padx2=0, pady1=0, pady2=0):
         """Verifica a interação do mouse com o objeto e atualiza os estados de clique e pressão."""
         POSX1 = self.x + padx1
         POSX2 = self.x + self.w + padx2
@@ -30,30 +30,30 @@ class Object(object):
             pyxel.mouse_x <= POSX2 and
             pyxel.mouse_y >= POSY1 and
             pyxel.mouse_y <= POSY2):
-            self.mouseUp = True
+            self.mouse_up = True
             
             # Mouse Click
             # Verifica se o botão do mouse está pressionado
             if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT):
-                self.mouseClick = True
+                self.mouse_click = True
             else:
-                self.mouseClick = False
+                self.mouse_click = False
                 
             # Mouse Pressed
             # Verifica se o botão do mouse foi pressionado no quadro atual
             if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-                self.mousePressed = True
+                self.mouse_pressed = True
             else:
-                self.mousePressed = False
+                self.mouse_pressed = False
             
             # Mouse released
             # Verifica se o botão do mouse foi solto
             if pyxel.btnr(pyxel.MOUSE_BUTTON_LEFT):
-                self.mouseReleased = True
+                self.mouse_released = True
             else:
-                self.mouseReleased = False
+                self.mouse_released = False
         else:
-            self.mouseUp = False
+            self.mouse_up = False
     
     def draw(self):
         """Desenha o objeto na tela usando a imagem e as coordenadas especificadas."""
